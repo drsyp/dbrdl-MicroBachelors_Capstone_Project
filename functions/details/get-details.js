@@ -1,6 +1,3 @@
-/**
-* Get all dealerships
-*/
 const { CloudantV1 } = require('@ibm-cloud/cloudant');
 const { IamAuthenticator } = require('ibm-cloud-sdk-core');
 
@@ -138,3 +135,4 @@ function getSlots(result) {
 
   return result;
 }
+exports.main = main;
