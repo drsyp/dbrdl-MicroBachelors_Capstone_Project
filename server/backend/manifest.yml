@@ -3,6 +3,6 @@ applications:
 - path: .
   name: capstone-2 #change to be unique in IBM Cloud
   buildpack: nodejs_buildpack
-  memory: 128M
+  memory: 256M
   instances: 1
   random-route: true
