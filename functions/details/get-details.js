@@ -1,19 +1,15 @@
-var Cloudant = require('@cloudant/cloudant');
-
 /**
-  *
-  * main() will be run when you invoke this action
-  *
-  * @param Cloud Functions actions accept a single parameter, which must be a JSON object.
-  *
-  * @return The output of this action, which must be a JSON object.
-  *
-  */
+* Get all dealerships
+*/
+const { CloudantV1 } = require('@ibm-cloud/cloudant');
+const { IamAuthenticator } = require('ibm-cloud-sdk-core');
+
 function main(params) {
   return new Promise((resolve, reject) => {
     if (params && params.type === "reviews") {
       getReviews(params).then(reviews => {
-        resolve({"reviews":reviews.docs})
+        //resolve({"reviews":reviews.docs})
+        resolve({"reviews":reviews.body})
       });
     } else if (params && params.type === "timeslots") {
       if (params.date) {
@@ -26,15 +22,39 @@ function main(params) {
 }
 
 function getReviews(params) {
-  console.log(params.CLOUDANT_URL);
-  console.log(params.CLOUDANT_APIKEY);
-  let reviews = [];
-  const cloudant = Cloudant({ url: params.CLOUDANT_URL, plugins: { iamauth: { iamApiKey: params.CLOUDANT_APIKEY } } });
-  const db = cloudant.db.use('reviews2')
+    const authenticator = new IamAuthenticator({ apikey: params.CLOUDANT_APIKEY })
+    const cloudant = CloudantV1.newInstance({ authenticator: authenticator});
+    cloudant.setServiceUrl(params.CLOUDANT_URL);
+    
+    let reviews = [];
+    
+    return new Promise(function (resolve, reject) {
+     cloudant.postAllDocs({ db: 'reviews2' , includeDocs: true })            
+        .then((result)=>{
+          // console.log(result.result.rows);
+          let code = 200;
+          if (result.result.rows.length == 0) {
+              code = 404;
+          }
+          jsonArray = result.result.rows;
+          jsonArray = jsonArray.map(x => x['doc']);
 
-  return db.find({ selector: { dealership: 13 }}) ;
+          resolve({
+              
+              
+              statusCode: code,
+              headers: { 'Content-Type': 'application/json' },
+              //body: result
+              //body: result.result.rows['doc']
+              body: jsonArray
+          });
+        }).catch((err)=>{
+          reject(err);
+        })
+    
+    })
+  
 }
-
 
 function getTimeSlots(date) {
 
@@ -92,8 +112,6 @@ function getTimeSlots(date) {
   return result;
 }
 
-
-
 function getWeekend(result) {
  //Implement it if you want to challenge yourself.
 }
@@ -120,6 +138,3 @@ function getSlots(result) {
 
   return result;
 }
-
-exports.main = main;
-
