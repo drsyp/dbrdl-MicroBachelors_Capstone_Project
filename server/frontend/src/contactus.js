@@ -6,11 +6,18 @@ class ContactUs extends React.Component {
     return (
       <div>
         <div style={{display:"flex"}}>
-        <img src='/contatus.jpeg' style={{width: "300px"}}/>
+        <img src='/img01.jpg' style={{width: "300px"}}/>
         <div style={{margin:"100px"}}>
-             <span style={{margin:"60px"}}>
-             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-               </span >
+        <pre>    
+        <h1>General Contact Information</h1><br />
+        Phone
+            202-606-1800*
+        Mailing Address
+            U.S. Office of Personnel Management
+            1900 E Street, NW
+            Washington, DC 20415-1000
+        </pre>
+            
            </div>
 
         </div>
